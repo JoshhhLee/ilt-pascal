@@ -95,7 +95,7 @@
           let st, fields;
           if (scr.kind === "builder") {
             const all = combos(scr).map((it) => ({ it, r: scr.evaluate(it) }));
-            const good = all.filter((x) => x.r.ok), bad = all.filter((x) => !x.r.ok && !/^M[67]$/.test(x.r.type));
+            const good = all.filter((x) => x.r.ok), bad = all.filter((x) => !x.r.ok && !/^(K3|M[67])$/.test(x.r.type));
             const k = 2 + Math.floor(rnd() * 3);
             const chosen = [];
             for (let j = 0; j < k; j++) chosen.push(rnd() < p ? pick(good) : pick(bad));

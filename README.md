@@ -53,7 +53,7 @@ Selama `scriptUrl` masih kosong, website tetap bisa dicoba: hasil hanya tersimpa
 
 ## Mengubah teks soal dan umpan balik
 
-Semua teks ada di **`assets/js/content.js`**: soal, pilihan kotak, pesan umpan balik (K1–K2, M1–M7, N1–N3), hal inti, jawaban yang tepat, serta pilihan Kesimpulan dan Peluang.
+Semua teks ada di **`assets/js/content.js`**: soal, pilihan kotak, pesan umpan balik (K1–K3, M1–M7, N1–N3), hal inti, jawaban yang tepat, serta pilihan Kesimpulan dan Peluang.
 Ubah teks di dalam tanda kutip saja. Placeholder `{X}` dan `{Y}` diisi otomatis oleh sistem.
 
 ## Aturan yang dipakai
@@ -74,7 +74,7 @@ Pemeriksaan sudah dicek terhadap file Excel:
 
 | Tabel | Pernyataan | Benar | Hal inti | Keterangan |
 |---|---|---|---|---|
-| 1 | 15 | 3 | 2 | K1 2, K2 10 |
+| 1 | 15 sesuai Excel, 24 bisa disusun | 3 | 2 | K1 2, K2 10; “menekan” dengan subjek selain operator (K3) 9 |
 | 2 | 30 sesuai Excel, 300 bisa disusun | 10 | 5 | M1–M5 masing-masing 4; besaran berbeda (M6) 240; besaran dengan dirinya sendiri (M7) 30 |
 | 3 | 12 | 6 | 3 | N1–N3 masing-masing 2 |
 
@@ -83,7 +83,7 @@ Pemeriksaan sudah dicek terhadap file Excel:
 Teks yang tidak ada di Excel ditandai `DRAF` di `content.js`.
 
 1. **Pilihan P.1 (a) dan P.2 (a–d) di Peluang** tidak tertulis di Excel. Teksnya disusun dari umpan balik. Kunci P.1 = a dan P.2 = b mengikuti Excel.
-2. **Pesan M6 dan M7** (Tabel 2) dan **alasan pada kunci Tabel 1** untuk bagian yang tidak berada di jalur cairan.
+2. **Pesan M6 dan M7** (Tabel 2), **pesan K3** (Tabel 1), dan **alasan pada kunci Tabel 1** untuk K2 dan K3. K3 muncul karena kotak “menekan” tidak lagi dicoret. Termasuk K3: “Silinder pengangkat menekan badan jembatan”, yang dinilai salah karena kunci Excel hanya menerima operator sebagai subjek “menekan”.
 3. **Baris “P.1 a, P.2 b atau c”** di sheet Peluang dibaca sebagai “P.2 a atau c”, karena kunci P.2 adalah b.
 4. **Sisa teks dari ILT sebelumnya di Excel**: “gambar pipa-U”, “tiga hal inti” (Tabel 1 punya 2) dan “empat hal inti” (Tabel 2 punya 5). Yang dipakai adalah kunci pada masing-masing sheet.
 5. **Tabel 3, sel D18** menulis “gaya → jarak dorong”; yang dipakai adalah kunci di sheet yang sama (“luas penampang → jarak gerak”).

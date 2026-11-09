@@ -68,18 +68,11 @@
     lead: "Perhatikan bagian-bagian jembatan pada gambar. Susun pernyataan tentang bagian yang ditekan operator dan bagian yang terhubung oleh cairan.",
     tip: "Pilih satu kotak dari setiap kolom, lalu tekan “Tambahkan”. Kamu tidak perlu menyusun semua pernyataan yang mungkin. Susun yang menurutmu penting.",
     // Domain Excel: 3 pernyataan "menekan" (subjeknya hanya operator) + 12 "terhubung oleh cairan" = 15.
-    // Kotak yang dicoret tidak membocorkan jawaban: operator tetap harus memilih bagian yang ditekannya.
+    // Kotak "menekan" dan kotak kiri sengaja tidak dicoret agar jawaban tidak ketahuan (sama seperti Tabel 2).
+    // Pernyataan "menekan" dengan subjek selain operator (K3) dinilai salah.
     slots: [
-      {
-        key: "x", label: "Bagian",
-        options: Object.keys(PART).map((k) => ({ v: k, text: PART[k].L, hl: PART[k].hl })),
-        disabled: (sel, o) => sel.rel === "tekan" && o.v !== "operator",
-      },
-      {
-        key: "rel", label: "Hubungan",
-        options: Object.keys(REL1).map((k) => ({ v: k, text: REL1[k] })),
-        disabled: (sel, o) => o.v === "tekan" && !!sel.x && sel.x !== "operator",
-      },
+      { key: "x", label: "Bagian", options: Object.keys(PART).map((k) => ({ v: k, text: PART[k].L, hl: PART[k].hl })) },
+      { key: "rel", label: "Hubungan", options: Object.keys(REL1).map((k) => ({ v: k, text: REL1[k] })) },
       {
         key: "y", label: "Bagian",
         options: Object.keys(PART).map((k) => ({ v: k, text: PART[k].R, hl: PART[k].hl })),
@@ -90,6 +83,9 @@
     evaluate(it) {
       const ctx = { X: PART[it.x].R, Y: PART[it.y].R };
       if (it.rel === "tekan") {
+        // DRAF: alasan pada kunci untuk K3
+        if (it.x !== "operator")
+          return { ok: false, type: "K3", cores: [], ctx, why: `Pada gambar, panah gaya tekan tidak berasal dari ${PART[it.x].R}.` };
         const ok = it.y === "piston";
         return { ok, type: ok ? null : "K1", cores: ok ? [1] : [], ctx };
       }
@@ -100,7 +96,7 @@
       return { ok, type: "K2", cores: [], ctx, why: `${cap(luar.join(" dan "))} tidak berada di jalur cairan hidrolik.` };
     },
     // null = tidak ada versi tepat untuk pasangan ini; kunci menampilkan alasannya saja
-    correctFor: (it) => (it.rel === "tekan" ? T1.sentence({ x: "operator", rel: "tekan", y: "piston" }) : null),
+    correctFor: (it) => (it.rel === "tekan" && it.x === "operator" ? T1.sentence({ x: "operator", rel: "tekan", y: "piston" }) : null),
     errors: {
       K1: {
         name: "“Menekan” untuk bagian yang tidak ditekan langsung operator",
@@ -111,6 +107,12 @@
         name: "“Terhubung oleh cairan” untuk bagian yang tidak berada di jalur cairan",
         1: "Telusuri jalur cairan hidrolik pada gambar. Apakah jalur itu sampai ke {X} dan {Y}?",
         2: "Cairan hidrolik hanya mengisi bagian yang dilaluinya pada gambar. Telusuri jalur itu dari awal sampai akhir dan periksa apakah {X} dan {Y} termasuk di dalamnya.",
+      },
+      // DRAF: K3 tidak ada di Excel. Muncul karena kotak "menekan" tidak dicoret.
+      K3: {
+        name: "“Menekan” dengan subjek selain operator",
+        1: "Lihat panah gaya tekan pada gambar. Apakah gaya tekan itu diberikan oleh {X}?",
+        2: "Panah gaya tekan pada gambar berasal dari satu bagian saja, dan bagian itu bukan {X}. Periksa dari mana panah itu berasal.",
       },
     },
     cores: [
